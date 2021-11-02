@@ -35,8 +35,8 @@
     float t=base.getArgument();
     float a=power.a;
     float b=power.b;
-    ComplexNum c1 = this.fromMA(pow(r,a),log(r)*b);
-    ComplexNum c2 = this.fromMA(exp(-b*t),a*t);
+    ComplexNum c1 = fromMA(pow(r,a),log(r)*b);
+    ComplexNum c2 = fromMA(exp(-b*t),a*t);
     
     return(simpleMult(c1,c2));
   }
@@ -46,4 +46,62 @@ ComplexNum compDiv(ComplexNum p, ComplexNum q){
   float denominator = q.getModulus();
   denominator=denominator*denominator;
   return(new ComplexNum(numerator.a/denominator, numerator.b/denominator));
+}
+
+//e^x
+ComplexNum compExp(ComplexNum x){
+  ComplexNum partA = new ComplexNum(exp(x.a),0);
+  ComplexNum partB = fromMA(1,x.b);
+  return(compMult(partA,partB));
+}
+
+ComplexNum compSin(ComplexNum theta){
+  ComplexNum minusOne = new ComplexNum(-1,0);
+  ComplexNum iTheta = compMult(new ComplexNum(0,1),theta);
+  ComplexNum eToITheta = compExp(iTheta);
+  ComplexNum eToMITheta = compExp(compMult(minusOne,iTheta));
+  ComplexNum numer = compAdd(eToITheta,compMult(minusOne,eToMITheta));
+  ComplexNum i2 = new ComplexNum(0,2);
+  return(compDiv(numer,i2));
+}
+
+ComplexNum compCos(ComplexNum theta){
+  ComplexNum minusOne = new ComplexNum(-1,0);
+  ComplexNum iTheta = compMult(new ComplexNum(0,1),theta);
+  ComplexNum eToITheta = compExp(iTheta);
+  ComplexNum eToMITheta = compExp(compMult(minusOne,iTheta));
+  ComplexNum numer = compAdd(eToITheta,eToMITheta);
+  ComplexNum r2 = new ComplexNum(2,0);
+  return(compDiv(numer,r2));
+}
+
+ComplexNum compTan(ComplexNum theta){
+  //(i(e^i2t-1)/(e^i2t+1)
+  ComplexNum eTo2iTheta = compExp(compMult(new ComplexNum(0,2),theta));
+  ComplexNum numer = compMult(new ComplexNum(0,1),compAdd(eTo2iTheta,new ComplexNum(-1,0)));
+  ComplexNum denom = compAdd(eTo2iTheta,new ComplexNum(1,0));
+  return(compDiv(numer,denom));
+}
+
+ComplexNum compSinh(ComplexNum x){
+  ComplexNum eX = compExp(x);
+  ComplexNum eMX = compExp(compMult(new ComplexNum(-1,0),x));
+  ComplexNum numer = compAdd(eX,compMult(new ComplexNum(-1,0),eMX));
+  ComplexNum r2 = new ComplexNum(2,0);
+  return(compDiv(numer,r2));
+}
+
+ComplexNum compCosh(ComplexNum x){
+  ComplexNum eX = compExp(x);
+  ComplexNum eMX = compExp(compMult(new ComplexNum(-1,0),x));
+  ComplexNum numer = compAdd(eX,eMX);
+  ComplexNum r2 = new ComplexNum(2,0);
+  return(compDiv(numer,r2));
+}
+
+ComplexNum compTanh(ComplexNum x){
+  ComplexNum e2x = compExp(compMult(new ComplexNum(2,0),x));
+  ComplexNum numer = compAdd(e2x,new ComplexNum(-1,0));
+  ComplexNum denom = compAdd(e2x,new ComplexNum(1,0));
+  return(compDiv(numer,denom));
 }
