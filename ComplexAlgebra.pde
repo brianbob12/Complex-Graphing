@@ -105,3 +105,23 @@ ComplexNum compTanh(ComplexNum x){
   ComplexNum denom = compAdd(e2x,new ComplexNum(1,0));
   return(compDiv(numer,denom));
 }
+
+ComplexNum compLn(ComplexNum x){
+  return(compAdd(new ComplexNum(log(x.getModulus()),0),new ComplexNum(0,x.getArgument())));
+}
+
+ComplexNum compArsinh(ComplexNum x){
+  ComplexNum x2plus1= compAdd(compMult(x,x),new ComplexNum(1,0));
+  return(compLn(compAdd(x,compPow(x2plus1,new ComplexNum(0.5,0)))));
+}
+
+ComplexNum compArcosh(ComplexNum x){
+  ComplexNum x2plus1= compAdd(compMult(x,x),new ComplexNum(-1,0));
+  return(compLn(compAdd(x,compPow(x2plus1,new ComplexNum(0.5,0)))));
+}
+
+ComplexNum compArtanh(ComplexNum x){
+  ComplexNum a= compLn(compAdd(x,new ComplexNum(1,0)));
+  ComplexNum b = compMult(new ComplexNum(-1,0),compLn(compAdd(compMult(new ComplexNum(-1,0),x),new ComplexNum(1,0))));
+  return(compMult(new ComplexNum(0.5,0),compAdd(a,b)));
+}
