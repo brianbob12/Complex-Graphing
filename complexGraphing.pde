@@ -6,11 +6,15 @@ int sizeY=1024;
 
 int version=3;
 
-float scale=0.5F/1024;
+float scale=4F/1024;
 float shift=0.5;
 float shiftAbs=shift*sizeX*scale;
 float maxV=1E-30;
 float maxVoffset=1;
+float t=0;
+
+boolean video=true;
+String equation = "f(z)=mod(z)-sin(txarg(z))";
 
 boolean show=false;
 boolean log=false;
@@ -40,7 +44,6 @@ ComplexNum i10=new ComplexNum(0,10);
 
 void keyPressed(){
   if(key=='s'){
-    String equation = "f(z)=tan(sin(z))";
     String path="v"+Integer.toString(version)+"/"+equation+"/scale "+Float.toString(scale)+" maxVoffset "+Float.toString(maxVoffset)+" shift "+Float.toString(shift);
     if(log){
       path+="l";
@@ -92,7 +95,7 @@ void mousePressed(){
 }
 
 ComplexNum f(ComplexNum z){
-  ComplexNum out=compTan(compSin(z));
+  ComplexNum out=new ComplexNum(z.getModulus()-sin(t*0.01*z.getArgument()),0f);
   return(out);
 }
 
@@ -158,4 +161,15 @@ void draw(){
       text("log",0,140);
     }
   }
+  
+  
+  if(video){
+    render();
+    saveFrame("v"+Integer.toString(version)+"/"+equation+"/####.png");
+    if(t==500){
+      exit();
+    }
+    t+=1;
+  }
+  
 }
